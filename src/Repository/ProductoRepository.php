@@ -59,7 +59,29 @@ class ProductoRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function search(string $term, int $limit = 20, int $offset = 0)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.activo = true')
+            ->andWhere('p.nombre LIKE :term OR p.descripcion LIKE :term')
+            ->setParameter('term', '%' . $term . '%')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+    }
 
+    public function countSearch(string $term): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->andWhere('p.activo = true')
+            ->andWhere('p.nombre LIKE :term OR p.descripcion LIKE :term')
+            ->setParameter('term', '%' . $term . '%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 //    /**
 //     * @return Producto[] Returns an array of Producto objects
 //     */

@@ -57,4 +57,29 @@ class TiendaController extends AbstractController
         ]);
 
     }
+    /**
+     * @Route("/productos/buscar", name="app_producto_buscar")
+     */
+    public function search(ProductoRepository $productoRepository, Request $request): Response
+    {
+        $q = trim($request->query->get('q', ''));
+        $limit = 20;
+        $page = max(1, $request->query->getInt('page', 1));
+
+        if ($q === '') {
+            $productos = [];
+            $totalPaginas = 0;
+        } else {
+            $total = $productoRepository->countSearch($q);
+            $totalPaginas = (int) ceil($total / $limit);
+            $productos = $productoRepository->search($q, $limit, ($page - 1) * $limit);
+        }
+
+        return $this->render('tienda/catalogo.html.twig', [
+            'productos' => $productos,
+            'paginaActual' => $page,
+            'totalPaginas' => $totalPaginas,
+            'q' => $q,
+        ]);
+    }
 }

@@ -3,19 +3,13 @@
 {% block title %}El Cochin - Tu tienda de abarrotes{% endblock %}
 
 {% block body %}
-    <div class="text-center text-white py-5" style="background: linear-gradient(135deg, #e8632b, #f2a33d);">
-        <h1 class="display-4 fw-bold">Bienvenido a El Cochin </h1>
-        <p class="lead">Productos frescos, precios justos, atención de barrio</p>
-        <div class="d-flex justify-content-center mt-4">
-            <form class="d-flex" style="max-width: 500px; width: 100%;" action="{{ path('app_producto_buscar') }}" method="get">
-                <input class="form-control form-control-lg" style="border-radius: 30px 0 0 30px;" type="search" name="q" placeholder="¿Qué buscas hoy?">
-                <button class="btn btn-light btn-lg fw-bold" style="border-radius: 0 30px 30px 0;" type="submit">Buscar</button>
-            </form>
-        </div>
-    </div>
-
     <div class="container my-5">
-        <h2 class="mb-4 fw-bold" style="color:#e8632b;">🔥 Productos Destacados</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h2 class="fw-bold mb-0" style="color:#e8632b;">🔥 Productos Destacados</h2>
+            <a href="{{ path('app_catalogo') }}" class="btn btn-outline-dark rounded-pill px-4">
+                Ver todos los productos →
+            </a>
+        </div>
         <div class="row g-4">
             {% for producto in destacados %}
                 <div class="col-6 col-md-3">
