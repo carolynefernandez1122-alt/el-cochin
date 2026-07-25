@@ -1,50 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Producto{% endblock %}
+{% block title %}{{ producto.nombre }}{% endblock %}
 
 {% block body %}
-    <h1>Producto</h1>
+    <div class="container my-5">
+        <div class="row g-4 align-items-start">
+            <div class="col-md-5">
+                <div class="shadow-sm rounded-4 overflow-hidden" style="border: 3px solid #f2c879;">
+                    {% if producto.imagenUrl %}
+                        <img src="{{ asset('uploads/productos/' ~ producto.imagenUrl) }}" alt="{{ producto.nombre }}" class="w-100" style="height:320px; object-fit:cover;">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light" style="height:320px;">
+                            <span class="text-muted">Sin imagen</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ producto.id }}</td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td>{{ producto.nombre }}</td>
-            </tr>
-            <tr>
-                <th>Descripcion</th>
-                <td>{{ producto.descripcion }}</td>
-            </tr>
-            <tr>
-                <th>Precio</th>
-                <td>{{ producto.precio }}</td>
-            </tr>
-            <tr>
-                <th>Stock</th>
-                <td>{{ producto.stock }}</td>
-            </tr>
-            <tr>
-                <th>Imagen_url</th>
-                <td>{{ producto.imagenUrl }}</td>
-            </tr>
-            <tr>
-                <th>Activo</th>
-                <td>{{ producto.activo ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Destacado</th>
-                <td>{{ producto.destacado ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            <div class="col-md-7">
+                {% if producto.destacado %}
+                    <span class="badge rounded-pill mb-2" style="background-color:#e8632b;">🔥 Destacado</span>
+                {% endif %}
 
-    <a href="{{ path('app_producto_index') }}">back to list</a>
+                <h1 class="fw-bold mb-1">{{ producto.nombre }}</h1>
+                <p class="text-muted mb-3">{{ producto.descripcion }}</p>
 
-    <a href="{{ path('app_producto_edit', {'id': producto.id}) }}">edit</a>
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <span class="fs-2 fw-bold" style="color:#e8632b;">{{ producto.precio }} €</span>
 
-    {{ include('producto/_delete_form.html.twig') }}
+                    {% if producto.activo %}
+                        <span class="badge bg-success">Disponible</span>
+                    {% else %}
+                        <span class="badge bg-secondary">No disponible</span>
+                    {% endif %}
+                </div>
+
+                <div class="card border-0 shadow-sm mb-4" style="background-color:#fdf3e3; border-radius:14px;">
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <small class="text-muted d-block">Stock</small>
+                            <span class="fw-bold">{{ producto.stock }} unidades</span>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block">Id producto</small>
+                            <span class="fw-bold">#{{ producto.id }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ path('app_producto_index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                        ← Volver
+                    </a>
+                    <a href="{{ path('app_producto_edit', {'id': producto.id}) }}" class="btn rounded-pill px-4" style="background-color:#e8632b; color:white;">
+                        Editar
+                    </a>
+                </div></main>
+
+                <div class="mt-3">
+                    {{ include('producto/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

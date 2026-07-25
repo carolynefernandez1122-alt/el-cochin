@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="text-center text-white py-5" style="background: linear-gradient(135deg, #e8632b, #f2a33d);">
-        <h1 class="display-4 fw-bold">Bienvenido a El Cochin 🐷</h1>
+        <h1 class="display-4 fw-bold">Bienvenido a El Cochin </h1>
         <p class="lead">Productos frescos, precios justos, atención de barrio</p>
         <div class="d-flex justify-content-center mt-4">
             <form class="d-flex" style="max-width: 500px; width: 100%;" action="{{ path('app_producto_buscar') }}" method="get">
@@ -19,13 +19,15 @@
         <div class="row g-4">
             {% for producto in destacados %}
                 <div class="col-6 col-md-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="{{ producto.imagenUrl }}" class="card-img-top" alt="{{ producto.nombre }}" style="height:180px; object-fit:cover; border-radius:14px 14px 0 0;">
-                        <div class="card-body">
-                            <h6 class="card-title">{{ producto.nombre }}</h6>
-                            <p class="fw-bold mb-0" style="color:#e8632b;">{{ producto.precio }} €</p>
+                    <a href="{{ path('app_producto_show', {id: producto.id}) }}" class="text-decoration-none text-reset">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="{{ asset('uploads/productos/' ~ producto.imagenUrl) }}" class="card-img-top" alt="{{ producto.nombre }}" style="height:180px; object-fit:cover; border-radius:14px 14px 0 0;">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ producto.nombre }}</h6>
+                                <p class="fw-bold mb-0" style="color:#e8632b;">{{ producto.precio }} €</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             {% else %}
                 <p class="text-muted">Aún no hay productos marcados como destacados. Márcalos como <code>destacado = true</code> desde el panel de administración.</p>
