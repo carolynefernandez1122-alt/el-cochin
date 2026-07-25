@@ -11,20 +11,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/producto")
+ * @Route("/admin/producto")
  */
 class ProductoController extends AbstractController
 {
     /**
      * @Route("/", name="app_producto_index", methods={"GET"})
      */
-    public function index(ProductoRepository $productoRepository): Response
+    public function index(ProductoRepository $productoRepository, Request $request): Response
     {
+        $limite = 20;
+        $pagina = max(1, $request->query->getInt('page', 1));
+
+        $totalProductos = $productoRepository->count([]);
+        $totalPaginas = (int) ceil($totalProductos / $limite);
+
+        $productos = $productoRepository->findBy(
+            [],                    // sin filtro
+            ['id' => 'DESC'],      // orden (ajústalo si quieres otro)
+            $limite,               // cuántos traer
+            ($pagina - 1) * $limite // desde dónde empezar
+        );
+
         return $this->render('producto/index.html.twig', [
-            'productos' => $productoRepository->findAll(),
+            'productos' => $productos,
+            'paginaActual' => $pagina,
+            'totalPaginas' => $totalPaginas,
         ]);
     }
-
     /**
      * @Route("/new", name="app_producto_new", methods={"GET", "POST"})
      */
