@@ -1,0 +1,22 @@
+<?php
+namespace App\Controller;
+
+use App\Repository\CategoriaRepository;
+use App\Repository\ProductoRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class HomeController extends AbstractController
+{
+    /**
+     * @Route("/", name="app_home")
+     */
+    public function index(CategoriaRepository $categoriaRepository, ProductoRepository $productoRepository): Response
+    {
+        return $this->render('home/index.html.twig', [
+            'categorias' => $categoriaRepository->findAll(),
+            'destacados' => $productoRepository->findDestacados(),
+        ]);
+    }
+}

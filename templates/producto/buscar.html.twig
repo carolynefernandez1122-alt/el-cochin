@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Resultados para "{{ q }}"{% endblock %}
+{% block body %}
+    <div class="container my-5">
+        <h2 class="mb-4">Resultados para "{{ q }}"</h2>
+        <div class="row g-4">
+            {% for producto in productos %}
+                <div class="col-6 col-md-3">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="{{ producto.imagenUrl }}" class="card-img-top" alt="{{ producto.nombre }}" style="height:180px; object-fit:cover;">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ producto.nombre }}</h6>
+                            <p class="fw-bold" style="color:#e8a33d;">{{ producto.precio }} €</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No se encontraron productos.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
