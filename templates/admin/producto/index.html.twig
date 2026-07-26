@@ -3,6 +3,9 @@
 {% block title %}Nuestros Productos{% endblock %}
 
 {% block body %}
+    <div id="resultadosProductos">
+        {% include 'tienda/_lista.html.twig' with { productos: productos } %}
+    </div>
     <div class="container my-5">
 
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
@@ -12,77 +15,5 @@
             </a>
         </div>
 
-        <div class="row g-4">
-            {% for producto in productos %}
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card h-100 shadow-sm border-0 position-relative">
-
-                        {% if producto.destacado %}
-                            <span class="badge rounded-pill position-absolute" style="top:10px; left:10px; background-color:#e8632b; z-index:2;">
-                            🔥 Destacado
-                        </span>
-                        {% endif %}
-
-                        <a href="{{ path('app_producto_show', {'id': producto.id}) }}" class="text-decoration-none text-reset">
-                            {% if producto.imagenUrl %}
-                                <img src="{{ asset('uploads/productos/' ~ producto.imagenUrl) }}" class="card-img-top" alt="{{ producto.nombre }}" style="height:180px; object-fit:cover; border-radius:14px 14px 0 0;">
-                            {% else %}
-                                <div class="d-flex align-items-center justify-content-center bg-light" style="height:180px; border-radius:14px 14px 0 0;">
-                                    <span class="text-muted small">Sin imagen</span>
-                                </div>
-                            {% endif %}
-
-                            <div class="card-body">
-                                <h6 class="card-title fw-semibold mb-1">{{ producto.nombre }}</h6>
-                                <p class="text-muted small mb-2" style="min-height:2.5em;">
-                                    {{ producto.descripcion|length > 60 ? producto.descripcion|slice(0, 60) ~ '...' : producto.descripcion }}
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold" style="color:#e8632b;">{{ producto.precio }} €</span>
-                                    {% if producto.activo %}
-                                        <span class="badge bg-success">Disponible</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">Agotado</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </a>
-
-                        <div class="card-footer bg-white border-0 pt-0 pb-3 px-3 d-flex justify-content-end">
-                            <a href="{{ path('app_producto_edit', {'id': producto.id}) }}" class="btn btn-sm btn-outline-secondary rounded-pill">
-                                <i class="bi bi-pencil"></i> Editar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="col-12 text-center py-5">
-                    <p class="text-muted fs-5">Aún no hay productos registrados.</p>
-                    <a href="{{ path('app_producto_new') }}" class="btn btn-cochin rounded-pill px-4">Crear el primero</a>
-                </div>
-            {% endfor %}
-            {% if totalPaginas > 1 %}
-                <nav class="mt-5 d-flex justify-content-center">
-                    <ul class="pagination">
-                        <li class="page-item {{ paginaActual == 1 ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ path('app_producto_index', {page: paginaActual - 1}) }}">Anterior</a>
-                        </li>
-
-                        {% for i in 1..totalPaginas %}
-                            <li class="page-item {{ i == paginaActual ? 'active' : '' }}">
-                                <a class="page-link" href="{{ path('app_producto_index', {page: i}) }}" style="{{ i == paginaActual ? 'background-color:#e8632b; border-color:#e8632b;' : '' }}">
-                                    {{ i }}
-                                </a>
-                            </li>
-                        {% endfor %}
-
-                        <li class="page-item {{ paginaActual == totalPaginas ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ path('app_producto_index', {page: paginaActual + 1}) }}">Siguiente</a>
-                        </li>
-                    </ul>
-                </nav>
-            {% endif %}
-
-        </div>
     </div>
 {% endblock %}

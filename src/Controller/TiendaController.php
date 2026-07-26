@@ -17,8 +17,11 @@ class TiendaController extends AbstractController
      */
     public function home(CategoriaRepository $categoriaRepository,ProductoRepository $productoRepository): Response
     {
+        $productos = $productoRepository->findBy([], null, 12); // los primeros 18, por ejemplo
+
         return $this->render('tienda/index.html.twig', [
             'destacados' => $productoRepository->findDestacados(12),
+            'productos' => $productos
         ]);
     }
 
@@ -58,9 +61,9 @@ class TiendaController extends AbstractController
 
     }
     /**
-     * @Route("/productos/buscar", name="app_producto_buscar")
+     * @Route("/tienda/searchByName", name="app_tienda_catalogo_buscar")
      */
-    public function search(ProductoRepository $productoRepository, Request $request): Response
+    public function searchByName(ProductoRepository $productoRepository, Request $request): Response
     {
         $q = trim($request->query->get('q', ''));
         $limit = 20;

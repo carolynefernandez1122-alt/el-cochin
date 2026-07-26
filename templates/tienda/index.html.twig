@@ -10,22 +10,8 @@
                 Ver todos los productos →
             </a>
         </div>
-        <div class="row g-4">
-            {% for producto in destacados %}
-                <div class="col-6 col-md-3">
-                    <a href="{{ path('app_producto_publico_show', {id: producto.id}) }}" class="text-decoration-none text-reset">
-                        <div class="card h-100 shadow-sm border-0">
-                            <img src="{{ asset('uploads/productos/' ~ producto.imagenUrl) }}" class="card-img-top" alt="{{ producto.nombre }}" style="height:180px; object-fit:cover; border-radius:14px 14px 0 0;">
-                            <div class="card-body">
-                                <h6 class="card-title">{{ producto.nombre }}</h6>
-                                <p class="fw-bold mb-0" style="color:#e8632b;">{{ producto.precio }} €</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% else %}
-                <p class="text-muted">Aún no hay productos marcados como destacados. Márcalos como <code>destacado = true</code> desde el panel de administración.</p>
-            {% endfor %}
+        <div id="resultadosProductos" data-context="home">>
+            {% include 'tienda/_lista.html.twig' with { productos: productos } %}
         </div>
     </div>
 {% endblock %}

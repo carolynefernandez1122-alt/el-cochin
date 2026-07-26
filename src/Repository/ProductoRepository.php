@@ -38,7 +38,7 @@ class ProductoRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function findDestacados(int $limit = 8)
+    public function findDestacados(int $limit = 12)
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.activo = true')
@@ -82,28 +82,15 @@ class ProductoRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-//    /**
-//     * @return Producto[] Returns an array of Producto objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Producto
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+    public function searchByName(string $query): array
+    {
+        return $this->createQueryBuilder('producto')
+            ->andWhere('producto.nombre LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('producto.nombre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -29,8 +29,8 @@
         El Cochin
     </a>
 
-    <form class="d-flex search-form flex-grow-1 mx-3" style="max-width: 420px;" action="{{ path('app_producto_buscar') }}" method="get">
-        <input class="form-control" type="search" name="q" placeholder="Buscar productos..." value="{{ q|default('') }}">
+    <form id="searchForm" class="d-flex search-form flex-grow-1 mx-3" style="max-width: 420px;" action="{{ path('app_producto_buscar') }}" method="get">
+        <input id="searchInput" class="form-control" type="search" name="q" placeholder="Buscar productos..." value="{{ q|default('') }}" autocomplete="off">
         <button class="btn btn-cochin" type="submit"><i class="bi bi-search"></i></button>
     </form>
 
@@ -53,5 +53,6 @@
 <footer class="text-white text-center py-4 mt-auto">
     <small>&copy; {{ "now"|date("Y") }} El Cochin — Tu tienda de abarrotes de confianza</small>
 </footer>
+<script src="{{ asset('js/search.js') }}"></script>
 </body>
 </html>
