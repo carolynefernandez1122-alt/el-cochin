@@ -9,7 +9,7 @@
                 {% include 'tienda/_categorias_sidebar.html.twig' %}
             </div>
             <div  class="col-12 col-md-8 mb-8">
-                <div id="resultadosProductos" data-context="catalogo">
+                <div id="resultadosProductos" data-context="catalogo" data-categoria="{{ categoriaId|default('') }}">
                     {% include 'tienda/_lista.html.twig' with { productos: productos, paginaActual: paginaActual, totalPaginas: totalPaginas, categoriaId: categoriaId } %}
                 </div>
             </div>

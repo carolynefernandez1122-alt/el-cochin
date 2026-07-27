@@ -101,32 +101,4 @@ class ProductoController extends AbstractController
 
         return $this->redirectToRoute('app_producto_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    /**
-     * @Route("/productos/search", name="app_producto_buscar", methods={"GET"})
-     */
-    public function search(Request $request, ProductoRepository $productoRepository): Response
-    {
-        $q = $request->query->get('q', '');
-        $context = $request->query->get('context', 'catalogo');
-
-        if ($q !== '') {
-            $productos = $productoRepository->searchByName($q);
-        } else {
-            $productos = $context === 'home'
-                ? $productoRepository->findDestacados()
-                : $productoRepository->findAll();
-        }
-
-        if ($request->isXmlHttpRequest()) {
-            return $this->render('tienda/_lista.html.twig', [
-                'productos' => $productos,
-            ]);
-        }
-
-        return $this->render('tienda/index.html.twig', [
-            'productos' => $productos,
-            'q' => $q,
-        ]);
-    }
 }

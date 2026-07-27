@@ -4,6 +4,11 @@
     {% for producto in productos %}
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <div class="card h-100 shadow-sm border-0 position-relative">
+                {% if producto.destacado %}
+                    <span class="badge position-absolute" style="top:10px; left:10px; background-color:#e8632b; z-index:1;">
+            <i class="bi bi-star-fill"></i> Destacado
+        </span>
+                {% endif %}
 
                 <a href="{{ path('app_producto_publico_show', {'id': producto.id}) }}" class="text-decoration-none text-reset">
                     {% if producto.imagenUrl %}
@@ -29,8 +34,7 @@
                         </div>
                     </div>
                 </a>
-            </div>
-        </div>
+            </div>        </div>
     {% else %}
         <div class="col-12 text-center py-5">
             {% if q is defined and q %}

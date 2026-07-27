@@ -10,8 +10,16 @@
                 Ver todos los productos →
             </a>
         </div>
-        <div id="resultadosProductos" data-context="home">>
-            {% include 'tienda/_lista.html.twig' with { productos: productos } %}
+
+        <div class="row">
+            <div class="col-12 col-md-3 mb-4">
+                {% include 'tienda/_categorias_sidebar.html.twig' %}
+            </div>
+            <div class="col-12 col-md-8 mb-4">
+                <div id="resultadosProductos" data-context="home">
+                    {% include 'tienda/_lista.html.twig' with { productos: productos } %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

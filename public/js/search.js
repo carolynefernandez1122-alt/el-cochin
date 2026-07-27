@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
         url.searchParams.set('q', query);
         url.searchParams.set('context', resultsContainer.dataset.context || 'catalogo');
 
+        if (resultsContainer.dataset.categoria) {
+            url.searchParams.set('categoria', resultsContainer.dataset.categoria);
+        }
         fetch(url, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             signal: abortController.signal

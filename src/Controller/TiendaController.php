@@ -66,27 +66,54 @@ class TiendaController extends AbstractController
 
     }
     /**
-     * @Route("/tienda/searchByName", name="app_tienda_catalogo_buscar")
+     * @Route("/tienda/searchByName", name="app_producto_buscar", methods={"GET"})
      */
     public function searchByName(ProductoRepository $productoRepository, Request $request): Response
     {
         $q = trim($request->query->get('q', ''));
-        $limit = 20;
-        $page = max(1, $request->query->getInt('page', 1));
+        $context = $request->query->get('context', 'catalogo');
+        $categoriaId = $request->query->get('categoria');
+        $limite = 20;
+        $pagina = max(1, $request->query->getInt('page', 1));
 
-        if ($q === '') {
-            $productos = [];
+        $criterios = [];
+        if ($categoriaId) {
+            $criterios['categoria'] = $categoriaId;
+        }
+
+        if ($q !== '') {
+            $total = $productoRepository->countSearch($q);
+            $totalPaginas = (int) ceil($total / $limite);
+            $productos = $productoRepository->search($q, $limite, ($pagina - 1) * $limite);
+        } elseif ($context === 'home') {
+            $productos = $productoRepository->findDestacados();
             $totalPaginas = 0;
         } else {
-            $total = $productoRepository->countSearch($q);
-            $totalPaginas = (int) ceil($total / $limit);
-            $productos = $productoRepository->search($q, $limit, ($page - 1) * $limit);
+            $total = $productoRepository->count($criterios);
+            $totalPaginas = (int) ceil($total / $limite);
+            $productos = $productoRepository->findBy(
+                $criterios,
+                ['id' => 'DESC'],
+                $limite,
+                ($pagina - 1) * $limite
+            );
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('tienda/_lista.html.twig', [
+                'productos' => $productos,
+                'paginaActual' => $pagina,
+                'totalPaginas' => $totalPaginas,
+                'categoriaId' => $categoriaId,
+                'q' => $q,
+            ]);
         }
 
         return $this->render('tienda/catalogo.html.twig', [
             'productos' => $productos,
-            'paginaActual' => $page,
+            'paginaActual' => $pagina,
             'totalPaginas' => $totalPaginas,
+            'categoriaId' => $categoriaId,
             'q' => $q,
         ]);
     }
