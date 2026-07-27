@@ -42,12 +42,16 @@ class TiendaController extends AbstractController
     {
         $limite = 20;
         $pagina = max(1, $request->query->getInt('page', 1));
-
-        $totalProductos = $productoRepository->count([]);
+        $categoriaId = $request->query->get('categoria');
+        $criterios = [];
+        if ($categoriaId) {
+            $criterios['categoria'] = $categoriaId;
+        }
+        $totalProductos = $productoRepository->count($criterios);
         $totalPaginas = (int) ceil($totalProductos / $limite);
 
         $productos = $productoRepository->findBy(
-            [],                    // sin filtro
+            $criterios,                    // sin filtro
             ['id' => 'DESC'],      // orden (ajústalo si quieres otro)
             $limite,               // cuántos traer
             ($pagina - 1) * $limite // desde dónde empezar
@@ -57,6 +61,7 @@ class TiendaController extends AbstractController
             'productos' => $productos,
             'paginaActual' => $pagina,
             'totalPaginas' => $totalPaginas,
+            'categoriaId' => $categoriaId,
         ]);
 
     }

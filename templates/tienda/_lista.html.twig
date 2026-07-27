@@ -2,7 +2,7 @@
 
 <div class="row g-3">
     {% for producto in productos %}
-        <div class="col-6 col-md-4 col-lg-3">
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <div class="card h-100 shadow-sm border-0 position-relative">
 
                 <a href="{{ path('app_producto_publico_show', {'id': producto.id}) }}" class="text-decoration-none text-reset">
@@ -41,24 +41,24 @@
         </div>
     {% endfor %}
     {% if totalPaginas is defined and totalPaginas > 1 %}
-            <nav class="mt-5 d-flex justify-content-center">
-                <ul class="pagination">
-                    <li class="page-item {{ paginaActual == 1 ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ path('app_catalogo', {page: paginaActual - 1}) }}">Anterior</a>
-                    </li>
+        <nav class="mt-5 d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item {{ paginaActual == 1 ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ path('app_catalogo', {page: paginaActual - 1, categoria: categoriaId|default(null)}) }}">Anterior</a>
+                </li>
 
-                    {% for i in 1..totalPaginas %}
-                        <li class="page-item {{ i == paginaActual ? 'active' : '' }}">
-                            <a class="page-link" href="{{ path('app_catalogo', {page: i}) }}" style="{{ i == paginaActual ? 'background-color:#e8632b; border-color:#e8632b;' : '' }}">
-                                {{ i }}
-                            </a>
-                        </li>
-                    {% endfor %}
-
-                    <li class="page-item {{ paginaActual == totalPaginas ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ path('app_catalogo', {page: paginaActual + 1}) }}">Siguiente</a>
+                {% for i in 1..totalPaginas %}
+                    <li class="page-item {{ i == paginaActual ? 'active' : '' }}">
+                        <a class="page-link" href="{{ path('app_catalogo', {page: i, categoria: categoriaId|default(null)}) }}" style="{{ i == paginaActual ? 'background-color:#e8632b; border-color:#e8632b;' : '' }}">
+                            {{ i }}
+                        </a>
                     </li>
-                </ul>
-            </nav>
+                {% endfor %}
+
+                <li class="page-item {{ paginaActual == totalPaginas ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ path('app_catalogo', {page: paginaActual + 1, categoria: categoriaId|default(null)}) }}">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
     {% endif %}
 </div>
