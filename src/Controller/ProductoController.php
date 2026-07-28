@@ -33,7 +33,7 @@ class ProductoController extends AbstractController
             ($pagina - 1) * $limite // desde dónde empezar
         );
 
-        return $this->render('producto/index.html.twig', [
+        return $this->render('admin/producto/index.html.twig', [
             'productos' => $productos,
             'paginaActual' => $pagina,
             'totalPaginas' => $totalPaginas,
