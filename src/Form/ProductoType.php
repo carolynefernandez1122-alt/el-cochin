@@ -6,7 +6,8 @@ use App\Entity\Producto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 class ProductoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -16,8 +17,18 @@ class ProductoType extends AbstractType
             ->add('descripcion')
             ->add('precio')
             ->add('stock')
-            ->add('imagen_url')
-            ->add('activo')
+            ->add('imagenFile', FileType::class, [
+                'label' => 'Imagen',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
+                        'mimeTypesMessage' => 'Sube una imagen válida (jpg, png o webp)',
+                    ])
+                ],
+            ])            ->add('activo')
             ->add('destacado')
             ->add('categoria')
         ;

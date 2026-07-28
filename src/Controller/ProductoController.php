@@ -48,13 +48,26 @@ class ProductoController extends AbstractController
         $form = $this->createForm(ProductoType::class, $producto);
         $form->handleRequest($request);
 
+        $imagenFile = $form->get('imagenFile')->getData();
+
+        if ($imagenFile) {
+            $nuevoNombre = uniqid() . '.' . $imagenFile->guessExtension();
+
+            $imagenFile->move(
+                $this->getParameter('productos_images_directory'),
+                $nuevoNombre
+            );
+
+            $producto->setImagenUrl($nuevoNombre);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $productoRepository->add($producto, true);
 
             return $this->redirectToRoute('app_producto_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('producto/new.html.twig', [
+        return $this->renderForm('admin/producto/new.html.twig', [
             'producto' => $producto,
             'form' => $form,
         ]);
@@ -65,7 +78,7 @@ class ProductoController extends AbstractController
      */
     public function show(Producto $producto): Response
     {
-        return $this->render('producto/show.html.twig', [
+        return $this->render('admin/producto/show.html.twig', [
             'producto' => $producto,
         ]);
     }
@@ -78,13 +91,26 @@ class ProductoController extends AbstractController
         $form = $this->createForm(ProductoType::class, $producto);
         $form->handleRequest($request);
 
+        $imagenFile = $form->get('imagenFile')->getData();
+
+        if ($imagenFile) {
+            $nuevoNombre = uniqid() . '.' . $imagenFile->guessExtension();
+
+            $imagenFile->move(
+                $this->getParameter('productos_images_directory'),
+                $nuevoNombre
+            );
+
+            $producto->setImagenUrl($nuevoNombre);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $productoRepository->add($producto, true);
 
             return $this->redirectToRoute('app_producto_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('producto/edit.html.twig', [
+        return $this->renderForm('admin/producto/edit.html.twig', [
             'producto' => $producto,
             'form' => $form,
         ]);

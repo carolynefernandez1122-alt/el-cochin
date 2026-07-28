@@ -3,50 +3,90 @@
 {% block title %}Productos{% endblock %}
 
 {% block body %}
-    <h1>Productos</h1>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for producto in productos %}
-            <tr>
-                <td>{{ producto.id }}</td>
-                <td>{{ producto.nombre }}</td>
-                <td>{{ producto.precio }}</td>
-                <td>
-                    <a href="{{ path('app_producto_show', {id: producto.id}) }}">Ver</a>
-                    <a href="{{ path('app_producto_edit', {id: producto.id}) }}">Editar</a>
-                    <form method="post" action="{{ path('app_producto_delete', {id: producto.id}) }}" onsubmit="return confirm('¿Seguro que quieres borrar este producto?');" style="display: inline-block">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ producto.id) }}">
-                        <button class="btn">Borrar</button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">No hay productos todavía.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {% if totalPaginas > 1 %}
-        <div class="paginacion">
-            {% for i in 1..totalPaginas %}
-                <a href="{{ path('app_producto_index', {page: i}) }}"
-                   class="{{ i == paginaActual ? 'activo' : '' }}">
-                    {{ i }}
-                </a>
-            {% endfor %}
+    <div class="container py-4" style="max-width: 900px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h4 mb-0">Productos</h1>
+                <p class="text-muted small mb-0">Gestiona el catálogo de la tienda</p>
+            </div>
+            <a href="{{ path('app_producto_new') }}" class="btn btn-cochin">
+                <i class="bi bi-plus-lg"></i> Nuevo producto
+            </a>
         </div>
-    {% endif %}
 
-    <a href="{{ path('app_producto_new') }}">Crear nuevo producto</a>
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">Id</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th class="text-end pe-3">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for producto in productos %}
+                        <tr>
+                            <td class="ps-3 text-muted">{{ producto.id }}</td>
+                            <td class="fw-medium">{{ producto.nombre }}</td>
+                            <td>{{ producto.precio|number_format(2, ',', '.') }} €</td>
+                            <td class="text-end pe-3">
+                                <a href="{{ path('app_producto_show', {id: producto.id}) }}" class="btn btn-sm btn-outline-secondary" title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_producto_edit', {id: producto.id}) }}" class="btn btn-sm btn-outline-primary" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-danger" title="Borrar" data-bs-toggle="modal" data-bs-target="#deleteModal{{ producto.id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+
+                                <div class="modal fade" id="deleteModal{{ producto.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ producto.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body p-4 text-center">
+                                                <div class="rounded-circle bg-danger-subtle d-inline-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                                                    <i class="bi bi-trash text-danger fs-4"></i>
+                                                </div>
+                                                <h5 class="mb-2">¿Borrar «{{ producto.nombre }}»?</h5>
+                                                <p class="text-muted small mb-4">Esta acción no se puede deshacer.</p>
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <form method="post" action="{{ path('app_producto_delete', {id: producto.id}) }}">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ producto.id) }}">
+                                                        <button class="btn btn-danger">Sí, borrar</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">
+                                <i class="bi bi-box-seam fs-3 d-block mb-2"></i>
+                                No hay productos todavía.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% if totalPaginas > 1 %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% for i in 1..totalPaginas %}
+                        <li class="page-item {{ i == paginaActual ? 'active' : '' }}">
+                            <a class="page-link" href="{{ path('app_producto_index', {page: i}) }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
 {% endblock %}
