@@ -41,27 +41,6 @@
                                 <button type="button" class="btn btn-sm btn-outline-danger" title="Borrar" data-bs-toggle="modal" data-bs-target="#deleteModal{{ producto.id }}">
                                     <i class="bi bi-trash"></i>
                                 </button>
-
-                                <div class="modal fade" id="deleteModal{{ producto.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ producto.id }}" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-4 text-center">
-                                                <div class="rounded-circle bg-danger-subtle d-inline-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
-                                                    <i class="bi bi-trash text-danger fs-4"></i>
-                                                </div>
-                                                <h5 class="mb-2">¿Borrar «{{ producto.nombre }}»?</h5>
-                                                <p class="text-muted small mb-4">Esta acción no se puede deshacer.</p>
-                                                <div class="d-flex gap-2 justify-content-center">
-                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <form method="post" action="{{ path('app_producto_delete', {id: producto.id}) }}">
-                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ producto.id) }}">
-                                                        <button class="btn btn-danger">Sí, borrar</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
                     {% else %}
@@ -89,4 +68,29 @@
             </nav>
         {% endif %}
     </div>
+
+    {# Modales de confirmación de borrado: fuera de la tabla, como hijos directos del body,
+       tal y como recomienda la documentación de Bootstrap #}
+    {% for producto in productos %}
+        <div class="modal fade" id="deleteModal{{ producto.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ producto.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-4 text-center">
+                        <div class="rounded-circle bg-danger-subtle d-inline-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                            <i class="bi bi-trash text-danger fs-4"></i>
+                        </div>
+                        <h5 class="mb-2">¿Borrar «{{ producto.nombre }}»?</h5>
+                        <p class="text-muted small mb-4">Esta acción no se puede deshacer.</p>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form method="post" action="{{ path('app_producto_delete', {id: producto.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ producto.id) }}">
+                                <button class="btn btn-danger">Sí, borrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
