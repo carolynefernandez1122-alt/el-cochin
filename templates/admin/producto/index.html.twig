@@ -19,18 +19,24 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                     <tr>
-                        <th class="ps-3">Id</th>
-                        <th>Nombre</th>
-                        <th>Precio</th>
+                        <th class="ps-3 sortable" data-sort="number" data-col="0">
+                            Id <i class="bi bi-arrow-down-up text-muted small"></i>
+                        </th>
+                        <th class="sortable" data-sort="text" data-col="1">
+                            Nombre <i class="bi bi-arrow-down-up text-muted small"></i>
+                        </th>
+                        <th class="sortable" data-sort="number" data-col="2">
+                            Precio <i class="bi bi-arrow-down-up text-muted small"></i>
+                        </th>
                         <th class="text-end pe-3">Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tabla-productos-body">
                     {% for producto in productos %}
                         <tr>
-                            <td class="ps-3 text-muted">{{ producto.id }}</td>
+                            <td class="ps-3 text-muted" data-value="{{ producto.id }}">{{ producto.id }}</td>
                             <td class="fw-medium">{{ producto.nombre }}</td>
-                            <td>{{ producto.precio|number_format(2, ',', '.') }} €</td>
+                            <td data-value="{{ producto.precio }}">{{ producto.precio|number_format(2, ',', '.') }} €</td>
                             <td class="text-end pe-3">
                                 <a href="{{ path('app_producto_show', {id: producto.id}) }}" class="btn btn-sm btn-outline-secondary" title="Ver">
                                     <i class="bi bi-eye"></i>
@@ -93,4 +99,57 @@
             </div>
         </div>
     {% endfor %}
+
+    <style>
+        th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+        th.sortable:hover { background-color: #eee; }
+        th.sortable i { font-size: 0.75em; vertical-align: middle; }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tbody = document.getElementById('tabla-productos-body');
+            const headers = document.querySelectorAll('th.sortable');
+
+            headers.forEach(function (th) {
+                th.addEventListener('click', function () {
+                    const col = parseInt(th.dataset.col, 10);
+                    const type = th.dataset.sort;
+                    const asc = th.dataset.direction !== 'asc';
+
+                    headers.forEach(function (h) {
+                        delete h.dataset.direction;
+                        h.querySelector('i').className = 'bi bi-arrow-down-up text-muted small';
+                    });
+                    th.dataset.direction = asc ? 'asc' : 'desc';
+                    th.querySelector('i').className = asc
+                        ? 'bi bi-arrow-up small'
+                        : 'bi bi-arrow-down small';
+
+                    const filas = Array.from(tbody.querySelectorAll('tr')).filter(function (tr) {
+                        return tr.children.length > 1;
+                    });
+
+                    filas.sort(function (a, b) {
+                        const celdaA = a.children[col];
+                        const celdaB = b.children[col];
+                        let valA = celdaA.dataset.value !== undefined ? celdaA.dataset.value : celdaA.textContent.trim();
+                        let valB = celdaB.dataset.value !== undefined ? celdaB.dataset.value : celdaB.textContent.trim();
+
+                        if (type === 'number') {
+                            valA = parseFloat(valA) || 0;
+                            valB = parseFloat(valB) || 0;
+                            return asc ? valA - valB : valB - valA;
+                        }
+
+                        return asc
+                            ? valA.localeCompare(valB, 'es', { sensitivity: 'base' })
+                            : valB.localeCompare(valA, 'es', { sensitivity: 'base' });
+                    });
+
+                    filas.forEach(function (tr) { tbody.appendChild(tr); });
+                });
+            });
+        });
+    </script>
 {% endblock %}
