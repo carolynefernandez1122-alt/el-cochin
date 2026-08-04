@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Producto;
 use App\Form\ProductoType;
 use App\Repository\ProductoRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +43,7 @@ class ProductoController extends AbstractController
     /**
      * @Route("/new", name="app_producto_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, ProductoRepository $productoRepository): Response
+    public function new(Request $request, ProductoRepository $productoRepository,EntityManagerInterface $entityManager): Response
     {
         $producto = new Producto();
         $form = $this->createForm(ProductoType::class, $producto);
@@ -63,6 +64,8 @@ class ProductoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $productoRepository->add($producto, true);
+            $entityManager->persist($producto);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_producto_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -86,7 +89,7 @@ class ProductoController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_producto_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Producto $producto, ProductoRepository $productoRepository): Response
+    public function edit(Request $request, Producto $producto, ProductoRepository $productoRepository,EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductoType::class, $producto);
         $form->handleRequest($request);
@@ -106,6 +109,8 @@ class ProductoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $productoRepository->add($producto, true);
+            $entityManager->persist($producto);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_producto_index', [], Response::HTTP_SEE_OTHER);
         }

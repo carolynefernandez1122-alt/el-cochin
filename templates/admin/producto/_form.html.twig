@@ -4,13 +4,25 @@
     <h6 class="text-uppercase text-muted small fw-bold mb-3">Información general</h6>
     <div class="row g-3">
         <div class="col-12 col-md-8">
-            {{ form_row(form.nombre, {label: 'Nombre', attr: {class: 'form-control'}}) }}
+            {{ form_label(form.nombre, 'Nombre') }}
+            {{ form_widget(form.nombre, {attr: {class: 'form-control'}}) }}
+            <div class="campo-errores">
+                {{ form_errors(form.nombre) }}
+            </div>
         </div>
         <div class="col-12 col-md-4">
-            {{ form_row(form.categoria, {label: 'Categoría', attr: {class: 'form-select'}}) }}
+            {{ form_label(form.categoria, 'Categoría') }}
+            {{ form_widget(form.categoria, {attr: {class: 'form-select'}}) }}
+            <div class="campo-errores">
+                {{ form_errors(form.categoria) }}
+            </div>
         </div>
         <div class="col-12">
-            {{ form_row(form.descripcion, {label: 'Descripción', attr: {class: 'form-control', rows: 3}}) }}
+            {{ form_label(form.descripcion, 'Descripción') }}
+            {{ form_widget(form.descripcion, {attr: {class: 'form-control', rows: 3}}) }}
+            <div class="campo-errores">
+                {{ form_errors(form.descripcion) }}
+            </div>
         </div>
     </div>
 </div>
@@ -21,10 +33,18 @@
     <h6 class="text-uppercase text-muted small fw-bold mb-3">Precio e inventario</h6>
     <div class="row g-3">
         <div class="col-6 col-md-4">
-            {{ form_row(form.precio, {label: 'Precio (€)', attr: {class: 'form-control'}}) }}
+            {{ form_label(form.precio, 'Precio (€)') }}
+            {{ form_widget(form.precio, {attr: {class: 'form-control'}}) }}
+            <div class="campo-errores">
+                {{ form_errors(form.precio) }}
+            </div>
         </div>
         <div class="col-6 col-md-4">
-            {{ form_row(form.stock, {label: 'Stock', attr: {class: 'form-control'}}) }}
+            {{ form_label(form.stock, 'Stock') }}
+            {{ form_widget(form.stock, {attr: {class: 'form-control'}}) }}
+            <div class="campo-errores">
+                {{ form_errors(form.stock) }}
+            </div>
         </div>
     </div>
 </div>
@@ -43,7 +63,9 @@
         {% endif %}
         <div class="flex-grow-1 w-100">
             {{ form_widget(form.imagenFile, {attr: {class: 'form-control'}}) }}
-            {{ form_errors(form.imagenFile) }}
+            <div class="campo-errores">
+                {{ form_errors(form.imagenFile) }}
+            </div>
             <div class="form-text">{{ imagenActual|default(null) ? 'Sube un archivo solo si quieres reemplazar la imagen actual.' : 'Formatos permitidos: jpg, png, webp. Máx 2MB.' }}</div>
         </div>
     </div>
@@ -59,11 +81,17 @@
                 {{ form_widget(form.activo, {attr: {class: 'form-check-input'}}) }}
                 {{ form_label(form.activo, 'Activo', {label_attr: {class: 'form-check-label'}}) }}
             </div>
+            <div class="campo-errores">
+                {{ form_errors(form.activo) }}
+            </div>
         </div>
         <div class="col-6">
             <div class="form-check form-switch">
                 {{ form_widget(form.destacado, {attr: {class: 'form-check-input'}}) }}
                 {{ form_label(form.destacado, 'Destacado', {label_attr: {class: 'form-check-label'}}) }}
+            </div>
+            <div class="campo-errores">
+                {{ form_errors(form.destacado) }}
             </div>
         </div>
     </div>
@@ -77,3 +105,15 @@
 </div>
 
 {{ form_end(form) }}
+<style>
+    .campo-errores ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.25rem 0 0;
+    }
+
+    .campo-errores li {
+        color: #dc3545;
+        font-size: 0.875rem;
+    }
+</style>

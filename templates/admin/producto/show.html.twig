@@ -7,7 +7,7 @@
         <div class="row g-4 align-items-start">
             <div class="col-md-5">
                 <div class="shadow-sm rounded-4 overflow-hidden" style="border: 3px solid #f2c879;">
-                    {% if producto.imagenUrl %}
+                    {% if producto.imagenUrl|trim is not empty %}
                         <img src="{{ asset('uploads/productos/' ~ producto.imagenUrl) }}" alt="{{ producto.nombre }}" class="w-100" style="height:320px; object-fit:cover;">
                     {% else %}
                         <div class="d-flex align-items-center justify-content-center bg-light" style="height:320px;">
